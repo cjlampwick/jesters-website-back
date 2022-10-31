@@ -38,7 +38,7 @@ app.use(cors());
 
 app.post("/mp_ipn", (req, res) =>{
   console.log(req.body);
-  response.status(200).send({});
+  res.status(200).send({});
 })
 app.post("/checkout", (req, res) => {
   console.log(req.body.fullName);
