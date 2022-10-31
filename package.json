@@ -1,0 +1,33 @@
+{
+  "name": "jesters-website",
+  "version": "1.0.0",
+  "description": "Jesters Esports - Official Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cjlampwick/jesters-website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cjlampwick/jesters-website/issues"
+  },
+  "homepage": "https://github.com/cjlampwick/jesters-website#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "jsonwebtoken": "^8.5.1",
+    "mercadopago": "^1.5.14",
+    "moment": "^2.29.4",
+    "mongoose": "^6.6.1"
+  }
+}
