@@ -37,7 +37,7 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/mp_ipn", (req, res) =>{
-  
+  console.log(req.body);
 })
 app.post("/checkout", (req, res) => {
   console.log(req.body.fullName);
