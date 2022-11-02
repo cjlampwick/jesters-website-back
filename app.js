@@ -220,11 +220,11 @@ app.post("/coworking", (request, response) => {
     notification_url: 'asd',
     
     preference.payer = {
-      name: result.data.body.name,
-      email: result.data.body.email,
+      name: "jorge",
+      email: "email@gmail.com",
       identification: {
         type: "DNI",
-        number: result.data.body.dni,
+        number: '12345678',
       },
     };
     
