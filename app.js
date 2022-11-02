@@ -40,6 +40,7 @@ app.post("/mp_ipn", (req, res) =>{
   console.log(req.body);
   console.log("notificar");
   res.status(200).send({});
+  
 })
 app.post("/checkout", (req, res) => {
   console.log(req.body.fullName);
@@ -136,6 +137,7 @@ app.post("/coworking", (request, response) => {
     userId: request.body.userId,
     halfFrom: Number(request.body.halfFrom),
     halfTo: Number(request.body.halfTo),
+    pending: true,
     // pointmentStatus: request.body.ppointmentStatus,
   });
   appointment
@@ -213,11 +215,12 @@ app.post("/coworking", (request, response) => {
       }
     }
     preference.back_urls = {
-      success: "https://jesters-website-front.herokuapp.com/mp_ipn",
+      success: "https://jesters-website-front.herokuapp.com/coworking/shceduler",
       failure: "https://localhost:3000/coworking",
       pending: "https://localhost:3000/coworking",
     };
-    notification_url: 'asd',
+
+    preference.notification_url = 'https://jesters-website-back.herokuapp.com/mp_ipn?appointmentid=' + appointment._id;
     
     preference.payer = {
       name: "jorge",
