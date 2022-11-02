@@ -38,6 +38,7 @@ app.use(cors());
 
 app.post("/mp_ipn", (req, res) =>{
   console.log(req.body);
+  console.log("notificar");
   res.status(200).send({});
 })
 app.post("/checkout", (req, res) => {
@@ -212,20 +213,22 @@ app.post("/coworking", (request, response) => {
       }
     }
     preference.back_urls = {
-      success: "http://localhost:3000/coworking/scheduler",
+      success: "https://jesters-website-front.herokuapp.com/mp_ipn",
       failure: "https://localhost:3000/coworking",
       pending: "https://localhost:3000/coworking",
     };
-  
+    notification_url: 'asd',
+    
     preference.payer = {
-      name: "jorge",
-      email: "jorge@gmail",
+      name: result.data.body.name,
+      email: result.data.body.email,
       identification: {
         type: "DNI",
-        number: "12345678",
+        number: result.data.body.dni,
       },
     };
-  
+    
+
     mercadopago.preferences
       .create(preference)
       .then((res) => {
