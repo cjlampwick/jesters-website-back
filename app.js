@@ -48,7 +48,7 @@ var merchantOrder;
       console.log(topic, 'getting payment' , paymentId);
       console.log(topic, 'getting marchant order');
       merchantOrder = await mercadopago.merchant_orders.findById(payment.body.order.id);
-      console.log(payment);
+      console.log(paymentId);
       break;
       case "merchant_order":
         const orderId = req.body.id;
