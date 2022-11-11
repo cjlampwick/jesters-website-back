@@ -36,11 +36,27 @@ dbConnect();
 app.use(express.json());
 app.use(cors());
 
-app.post("/mp_ipn", (req, res) =>{
-  console.log(req.body);
-  console.log("notificar");
-  res.status(200).send({});
-  
+app.post("/mp_ipn", async (req, res) =>{
+  console.log("ASD");
+  console.log("hola", req.body);
+  const topic = query.topic;
+  console.log({topic});
+var merchantOrder;
+  switch (topic){
+    case "payment":
+      const paymentId = query.id ;
+      console.log(topic, 'getting payment' , paymentId);
+      console.log(topic, 'getting marchant order');
+      merchantOrder = await mercadopago.merchant_orders.findById(payment.bordy.order.id);
+      console.log(payment);
+      break;
+      case "merchant_order":
+        const orderId = query.id;
+        console.log(topic, 'getting merchant order', orderId);
+        break;
+  }
+
+  res.send();
 })
 app.post("/checkout", (req, res) => {
   console.log(req.body.fullName);
@@ -151,6 +167,7 @@ app.post("/coworking", (request, response) => {
         error,
       });
     });
+    
     let preference = {};
     preference.items = [];
 
