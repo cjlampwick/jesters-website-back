@@ -39,19 +39,19 @@ app.use(cors());
 app.post("/mp_ipn", async (req, res) =>{
   console.log("ASD");
   console.log("hola", req.body);
-  const topic = query.topic;
-  console.log({topic});
+  const topic = req.body.topic;
+  console.log("topiccc:", topic);
 var merchantOrder;
   switch (topic){
     case "payment":
-      const paymentId = query.id ;
+      const paymentId = req.body.id ;
       console.log(topic, 'getting payment' , paymentId);
       console.log(topic, 'getting marchant order');
-      merchantOrder = await mercadopago.merchant_orders.findById(payment.bordy.order.id);
+      merchantOrder = await mercadopago.merchant_orders.findById(payment.body.order.id);
       console.log(payment);
       break;
       case "merchant_order":
-        const orderId = query.id;
+        const orderId = req.body.id;
         console.log(topic, 'getting merchant order', orderId);
         break;
   }
