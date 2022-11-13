@@ -36,7 +36,7 @@ dbConnect();
 app.use(express.json());
 app.use(cors());
 
-app.post("/mp_ipn", async (req, res) =>{
+app.post("/mp_ipn", (req, res) =>{
   console.log("ASD");
   console.log("hola", req.body);
   const topic = req.body.topic;
@@ -47,7 +47,7 @@ app.post("/mp_ipn", async (req, res) =>{
       const paymentId = req.body.id ;
       console.log(topic, 'getting payment' , paymentId);
       console.log(topic, 'getting marchant order');
-      merchantOrder = await mercadopago.merchant_orders.findById(payment.body.order.id);
+      merchantOrder = mercadopago.merchant_orders.findById(payment.body.order.id);
       console.log(paymentId);
       break;
     case "merchant_order":
