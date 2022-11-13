@@ -14,7 +14,7 @@ dotenv.config();
 
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-// require database connection
+
 const dbConnect = require("./server/db/dbConnect");
 const User = require("./server/db/userModel");
 const Appointment = require("./server/db/appointmentModel");
@@ -47,12 +47,11 @@ app.post("/mp_ipn", (req, res) =>{
       const paymentId = req.body.id ;
       console.log(topic, 'getting payment' , paymentId);
       console.log(topic, 'getting marchant order');
-      merchantOrder = mercadopago.merchant_orders.findById(payment.body.order.id);
-      console.log(paymentId);
       break;
     case "merchant_order":
       const orderId = req.body.id;
       console.log(topic, 'getting merchant order', orderId);
+      merchantOrder = mercadopago.merchant_orders.findById(orderId);
       break;
   }
 
