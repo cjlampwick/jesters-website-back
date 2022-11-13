@@ -1,8 +1,9 @@
 const bcrypt = require("bcrypt");
 const express = require("express");
+const { v4 } = require('uuid');
 
 const jwt = require("jsonwebtoken");
-const auth = require("./auth");
+const auth = require("../auth");
 const PORT = process.env.PORT || 3001;
 const app = express();
 const dotenv = require("dotenv");
@@ -15,11 +16,11 @@ dotenv.config();
 //middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 // require database connection
-const dbConnect = require("./server/db/dbConnect");
-const User = require("./server/db/userModel");
-const Appointment = require("./server/db/appointmentModel");
-const Comprador = require("./server/db/compradorModel");
-const Reserve = require("./server/db/reserveCoworkingModel");
+const dbConnect = require("../server/db/dbConnect");
+const User = require("../server/db/userModel");
+const Appointment = require("../server/db/appointmentModel");
+const Comprador = require("../server/db/compradorModel");
+const Reserve = require("../server/db/reserveCoworkingModel");
 
 const cors = require("cors");
 //SDK Mercadopago
@@ -35,6 +36,18 @@ dbConnect();
 
 app.use(express.json());
 app.use(cors());
+
+app.get('/api', (req, res) => {
+  const path = `/api/item/${v4()}`;
+  res.setHeader('Content-Type', 'text/html');
+  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
+  res.end(`Hello! Go to item: <a href="${path}">${path}</a>`);
+});
+
+app.get('/api/item/:slug', (req, res) => {
+  const { slug } = req.params;
+  res.end(`Item: ${slug}`);
+});
 
 app.post("/mp_ipn", async (req, res) =>{
   console.log("ASD");
@@ -424,3 +437,5 @@ app.get("/news", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
+
+module.exports = app;
