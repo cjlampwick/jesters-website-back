@@ -55,7 +55,7 @@ app.post("/mp_ipn", (req, res) =>{
       break;
   }
 
-  res.send();
+  res.status(200).send();
 })
 
 app.post("/test", (request, response) => {
