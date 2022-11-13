@@ -2,7 +2,7 @@
   "name": "jesters-website",
   "version": "1.0.0",
   "description": "Jesters Esports - Official Website",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app"
@@ -29,5 +29,8 @@
     "mercadopago": "^1.5.14",
     "moment": "^2.29.4",
     "mongoose": "^6.6.1"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
