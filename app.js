@@ -59,80 +59,6 @@ app.post("/mp_ipn", (req, res) =>{
   res.send();
 })
 
-app.post("/checkout", (req, res) => {
-  console.log(req.body.fullName);
-  console.log(req.body.dni);
-  console.log(req.body.email);
-  console.log(req.body.ticketType);
-  const comprador = new Comprador({
-    fullName: req.body.fullName,
-    email: req.body.email,
-    dni: Number(req.body.dni),
-    ticketType: Number(req.body.ticketType),
-  });
-  console.log("despues de instancia");
-
-  // comprador
-  //   .save()
-  //   .then((result) => {
-  //     console.log('comprador creado: ' + result);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //     res.status(500).send({
-  //       message: "Error saved date",
-  //       error,
-  //     });
-  //   });
-
-  let preference = {};
-  preference.items = [];
-
-  if (this.ticketType == 1) {
-    preference.items.push({
-      title: "Entrada Jesters Halloween con disfraz",
-      unit_price: 700,
-      quantity: 1,
-    })
-  } else {
-    preference.items.push({
-      title: "Entrada Jesters Halloween sin disfraz",
-      unit_price: 1500,
-      quantity: 1,
-    })
-  }
-
-  preference.back_urls = {
-    success: "https://localhost:3000/success",
-    failure: "https://localhost:3000/jestersparty",
-    pending: "https://localhost:3000/jestersparty",
-  };
-
-  preference.payer = {
-    name: this.fullName,
-    email: this.email,
-    identification: {
-      type: "DNI",
-      number: this.dni,
-    },
-  };
-
-  mercadopago.preferences
-    .create(preference)
-    .then((response) => {
-      console.log("Te envio a MercadoPago");
-      let preferenceResponse = JSON.stringify(response.body.init_poin);
-      res.status(200).json({
-        message: 'OK',
-        mp_body: response.body,
-      }
-      );
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-});
-
 app.post("/test", (request, response) => {
   console.log(JSON.stringify(request.body));
 
@@ -238,7 +164,7 @@ app.post("/coworking", (request, response) => {
       pending: "https://localhost:3000/coworking",
     };
 
-    preference.notification_url = 'https://jesters-website-back.herokuapp.com/mp_ipn?appointmentid=' + appointment._id;
+    preference.notification_url = 'https://jesters-website-back.vercel.app/mp_ipn?appointmentid=' + appointment._id;
     
     preference.payer = {
       name: "jorge",
