@@ -41,7 +41,7 @@ app.post("/mp_ipn", async (req, res) =>{
   console.log("hola", req.body);
   const topic = req.body.topic;
   console.log("topiccc:", topic);
-var merchantOrder;
+  var merchantOrder;
   switch (topic){
     case "payment":
       const paymentId = req.body.id ;
@@ -50,14 +50,15 @@ var merchantOrder;
       merchantOrder = await mercadopago.merchant_orders.findById(payment.body.order.id);
       console.log(paymentId);
       break;
-      case "merchant_order":
-        const orderId = req.body.id;
-        console.log(topic, 'getting merchant order', orderId);
-        break;
+    case "merchant_order":
+      const orderId = req.body.id;
+      console.log(topic, 'getting merchant order', orderId);
+      break;
   }
 
   res.send();
 })
+
 app.post("/checkout", (req, res) => {
   console.log(req.body.fullName);
   console.log(req.body.dni);
@@ -71,18 +72,18 @@ app.post("/checkout", (req, res) => {
   });
   console.log("despues de instancia");
 
-  comprador
-    .save()
-    .then((result) => {
-      console.log('comprador creado: ' + result);
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).send({
-        message: "Error saved date",
-        error,
-      });
-    });
+  // comprador
+  //   .save()
+  //   .then((result) => {
+  //     console.log('comprador creado: ' + result);
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //     res.status(500).send({
+  //       message: "Error saved date",
+  //       error,
+  //     });
+  //   });
 
   let preference = {};
   preference.items = [];
