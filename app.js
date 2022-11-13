@@ -51,7 +51,7 @@ app.post("/mp_ipn", (req, res) =>{
     case "merchant_order":
       const orderId = req.body.id;
       console.log(topic, 'getting merchant order', orderId);
-      merchantOrder = mercadopago.merchant_orders.findById(orderId);
+      //merchantOrder = mercadopago.merchant_orders.findById(orderId);
       break;
   }
 
