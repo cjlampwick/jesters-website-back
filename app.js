@@ -50,7 +50,7 @@ app.post("/mp_ipn", (req, res) =>{
 
       let payment = mercadopago.payment.findById(paymentId).then((r) => {
         console.log('status', r.body.status);
-        console.log('status_details', r.body.status_details);
+        console.log('status_detail', r.body.status_detail);
 
         // TODO: Actualizar appointment usando el estado y el detaille de estado del pago
       }).finally(() => {
