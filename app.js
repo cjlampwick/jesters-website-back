@@ -38,8 +38,10 @@ app.use(cors());
 
 app.post("/mp_ipn", (req, res) =>{
   console.log("body", req.body);
-  const topic = req.body.topic;
-  console.log("topic:", topic);
+  console.log("query", req.query);
+
+  // const topic = req.body.topic;
+  // console.log("topic:", topic);
   var merchantOrder;
   switch (topic){
     case "payment":
@@ -52,13 +54,14 @@ app.post("/mp_ipn", (req, res) =>{
     case "merchant_order":
       const orderId = req.body.id;
       console.log(topic, 'getting merchant order', orderId);
-      merchantOrder = mercadopago.merchant_orders.findById(orderId);
+      // merchantOrder = mercadopago.merchant_orders.findById(orderId);
 
       res.status(200).send();
       break;
+    default:
+      res.status(200).send();
+      break;
   }
-
-  
 })
 
 app.post("/test", (request, response) => {
@@ -127,6 +130,7 @@ app.post("/coworking", (request, response) => {
     quantity: 1,
   })
 
+  //TODO: no usar URL hardcodeada. Usar variable de entorno
   preference.notification_url = 'https://jesters-website-back.vercel.app/mp_ipn?appointmentid=' + appointment._id;
   
   preference.payer = {
