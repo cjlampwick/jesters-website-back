@@ -40,24 +40,25 @@ app.post("/mp_ipn", (req, res) =>{
   console.log("body", req.body);
   console.log("query", req.query);
 
-  // const topic = req.body.topic;
+  const topic = req.body.topic;
   // console.log("topic:", topic);
   var merchantOrder;
   switch (topic){
     case "payment":
-      const paymentId = req.body.id ;
-      console.log(topic, 'getting payment' , paymentId);
-      console.log(topic, 'getting marchant order');
+      const paymentId = req.query.id ;
+      const appointmentid = req.query.appointmentid ;
 
-      res.status(200).send();
-      break;
-    case "merchant_order":
-      const orderId = req.body.id;
-      console.log(topic, 'getting merchant order', orderId);
-      // merchantOrder = mercadopago.merchant_orders.findById(orderId);
+      let payment = mercadopago.payment.findById(paymentId).then((r) => {
+        console.log('status', r.body.status);
+        console.log('status_details', r.body.status_details);
 
-      res.status(200).send();
+        // TODO: Actualizar appointment usando el estado y el detaille de estado del pago
+      }).finally(() => {
+        res.status(200).send();
+      });
+
       break;
+
     default:
       res.status(200).send();
       break;
