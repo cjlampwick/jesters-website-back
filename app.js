@@ -37,28 +37,32 @@ app.use(express.json());
 app.use(cors());
 
 app.post("/mp_ipn", (req, res) =>{
-  console.log("ASD");
-  console.log("hola", req.body);
+  console.log("body", req.body);
   const topic = req.body.topic;
-  console.log("topiccc:", topic);
+  console.log("topic:", topic);
   var merchantOrder;
   switch (topic){
     case "payment":
       const paymentId = req.body.id ;
       console.log(topic, 'getting payment' , paymentId);
       console.log(topic, 'getting marchant order');
+
+      res.status(200).send();
       break;
     case "merchant_order":
       const orderId = req.body.id;
       console.log(topic, 'getting merchant order', orderId);
-      //merchantOrder = mercadopago.merchant_orders.findById(orderId);
+      merchantOrder = mercadopago.merchant_orders.findById(orderId);
+
+      res.status(200).send();
       break;
   }
 
-  res.status(200).send();
+  
 })
 
 app.post("/test", (request, response) => {
+  console.log(JSON.stringify(request.query));
   console.log(JSON.stringify(request.body));
 
   response.json(request.body);
@@ -79,9 +83,9 @@ app.post("/coworking", (request, response) => {
     userId: request.body.userId,
     halfFrom: Number(request.body.halfFrom),
     halfTo: Number(request.body.halfTo),
-    pending: true,
-    // pointmentStatus: request.body.ppointmentStatus,
+    status: 'pending',
   });
+
   appointment
     .save()
     .then((result) => {
@@ -92,105 +96,64 @@ app.post("/coworking", (request, response) => {
         message: "Error saved date",
         error,
       });
+
+      return;
     });
     
-    let preference = {};
-    preference.items = [];
+  let preference = {};
+  preference.items = [];
 
-    console.log(appointment.dateFrom);
-    let dias = moment(appointment.dateFrom).diff(moment(appointment.dateTo), "days");
-    dias = dias * -1;
-    console.log(dias);
-    
-    if(dias == 0){
-
+  let dias = moment(appointment.dateFrom).diff(moment(appointment.dateTo), "days");
+  dias = dias * -1;
+  
+  if(dias == 0)
     dias = 1;
-      //Desde las 9 hasta las 18
-      if(appointment.halfFrom == 1 && appointment.halfTo == 2){
-        preference.items.push({
-          title: "Reserva para coworking",
-          unit_price: dias*800,
-          quantity: 1,
 
-        })
-      }
-      //Desde las 9 hasta las 13
-      if(appointment.halfFrom == 1 && appointment.halfTo == 1){
-        preference.items.push({
-          title: "Reserva para coworking",
-          unit_price: dias*400,
-          quantity: 1,
-        })
-      }
-      //Desde las 13 hasta las 18
-      if(appointment.halfFrom == 2 && appointment.halfTo == 2){
-        preference.items.push({
-          title: "Reserva para coworking",
-          unit_price: dias*400,
-          quantity: 1,
-        })
-      }
-    }else{
-      //Desde las 9 hasta las 18
-      if(appointment.halfFrom == 1 && appointment.halfTo == 2){
-        preference.items.push({
-          title: "Reserva para coworking",
-          unit_price: dias*800,
-          quantity: 1,
-        })
-      }
-      //Desde las 9 hasta las 13
-      if(appointment.halfFrom == 1 && appointment.halfTo == 1){
-        preference.items.push({
-          title: "Reserva para coworking",
-          unit_price: dias*400,
-          quantity: 1,
-        })
-      }
-      //Desde las 13 hasta las 18
-      if(appointment.halfFrom == 2 && appointment.halfTo == 2){
-        preference.items.push({
-          title: "Reserva para coworking",
-          unit_price: dias*400,
-          quantity: 1,
-          
-        })
-      }
-    }
-    preference.back_urls = {
-      success: "https://jesters-website-front.herokuapp.com/coworking/shceduler",
-      failure: "https://localhost:3000/coworking",
-      pending: "https://localhost:3000/coworking",
-    };
+  let price = 0;
 
-    preference.notification_url = 'https://jesters-website-back.vercel.app/mp_ipn?appointmentid=' + appointment._id;
-    
-    preference.payer = {
-      name: "jorge",
-      email: "email@gmail.com",
-      identification: {
-        type: "DNI",
-        number: '12345678',
-      },
-    };
-    
+  //Desde las 9 hasta las 18
+  if(appointment.halfFrom == 1 && appointment.halfTo == 2)
+    price = dias*800
+  //Desde las 9 hasta las 13
+  if(appointment.halfFrom == 1 && appointment.halfTo == 1)
+    price = dias*400
+  //Desde las 13 hasta las 18
+  if(appointment.halfFrom == 2 && appointment.halfTo == 2)
+    price = dias*400;
 
-    mercadopago.preferences
-      .create(preference)
-      .then((res) => {
-        console.log("Te envio a MercadoPago");
-        let preferenceResponse = JSON.stringify(res.body.init_poin);
-        response.status(200).json({
+  preference.items.push({
+    title: `Reserva para coworking (${dias})`,
+    unit_price: price,
+    quantity: 1,
+  })
+
+  preference.notification_url = 'https://jesters-website-back.vercel.app/mp_ipn?appointmentid=' + appointment._id;
+  
+  preference.payer = {
+    name: "jorge",
+    email: "email@gmail.com",
+    identification: {
+      type: "DNI",
+      number: '12345678',
+    },
+  };
+
+  mercadopago.preferences
+    .create(preference)
+    .then((res) => {
+      let preferenceResponse = JSON.stringify(res.body.init_poin);
+      console.log("Generando redireccion a MP", preferenceResponse);
+      response.status(200).json({
           message: 'OK',
           result: appointment,
           mp_body: res.body,
         }
-        );
-      })
-      .catch(function (error) {
-        console.log("error 149");
-        console.log(error);
-      });
+      );
+    })
+    .catch(function (error) {
+      console.log("error 149");
+      console.log(error);
+    });
 });
 // register endpoint
 app.post("/register", (request, response) => {

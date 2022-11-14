@@ -29,7 +29,20 @@ const AppointmentSchema = new mongoose.Schema({
     required: [true, "Please provide an hour"],
     unique: false,
   },
+
+  status: {
+    type: String,
+    required: [true, "Please provide a status"],
+    unique: false,
+  },
+
+  statusDetails: {
+    type: String,
+    required: false,
+    unique: false,
+  },
 });
+
 module.exports =
   mongoose.model.Appointment ||
   mongoose.model("Appointment", AppointmentSchema);
