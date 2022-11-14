@@ -49,8 +49,28 @@ app.post("/mp_ipn", (req, res) =>{
       const appointmentid = req.query.appointmentid ;
 
       let payment = mercadopago.payment.findById(paymentId).then((r) => {
-        console.log('status', r.body.status);
-        console.log('status_detail', r.body.status_detail);
+        
+        let status = r.body.status;
+        let status_detail = r.body.status_detail;
+        
+        console.log('status', status);
+        console.log('status_detail', status_detail);
+
+        // 1- Obtener el appointment
+
+        Appointment.findOne({ _id: appointmentid })
+          .then((appointment) => {
+            appointment.status = status;
+            appointment.statusDetails = status_detail;
+
+            // 2- Actualizar el appointment
+
+            appointment
+              .save()
+              .then((result) => {
+                res.status(200).send();
+              })
+          });
 
         // TODO: Actualizar appointment usando el estado y el detaille de estado del pago
       }).finally(() => {
