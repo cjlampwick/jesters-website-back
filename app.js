@@ -62,6 +62,8 @@ app.post("/mp_ipn", (req, res) =>{
           .then((appointment) => {
             appointment.status = status;
             appointment.statusDetails = status_detail;
+            console.log("status:",status);
+            console.log("statusDetail:",status_detail);
 
             // 2- Actualizar el appointment
 
