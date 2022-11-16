@@ -148,7 +148,7 @@ app.post("/coworking", (request, response) => {
     price = dias*400;
 
   preference.items.push({
-    title: `Reserva para coworking (${dias})`,
+    title: `Reserva para coworking (${dias}) dia/s`,
     unit_price: price,
     quantity: 1,
   })
